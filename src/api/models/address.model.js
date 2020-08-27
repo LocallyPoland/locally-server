@@ -1,12 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
+const AdressSchema = new Schema({
   userID: { type: mongoose.ObjectId, ref: "users" },
-  parcel: Array,
-  sum: Number,
-  status: String,
-  pickUp: String,
   deliveryCity: String,
   deliveryStreet: String,
   deliveryHouse: String,
@@ -16,9 +12,8 @@ const OrderSchema = new Schema({
   deletedAt: Date,
 }, {
   timestamps: true
-}
-);
+});
 
-const Order = mongoose.model("Order", OrderSchema, "orders");
+const Adress = mongoose.model("Adress", AdressSchema, "adress");
 
-module.exports = Order;
+module.exports = Adress;

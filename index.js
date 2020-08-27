@@ -7,31 +7,30 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const path = require("path");
 const db = require("./src/db");
-const session = require("express-session");
+// const session = require("express-session");
 const passport = require("passport");
-const passportFBconfig = require('./src/passport/facebookStrategy');
-const passportGoogleConfig = require('./src/passport/googleStrategy');
+const passportFBconfig = require('./src/api/passport/facebook.strategy');
 const {
     User,
-    Orders,
-} = require("./src/routes");
+    // Orders,
+} = require("./src/api/routes");
 
 // parse application/x-www-form-urlencoded & application/json
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
-    session({
-        resave: true,
-        saveUninitialized: true,
-        secret: process.env.SESSION_SECRET,
-        cookie: {
-            secure: true,
-            httpOnly: true,
-            expires: new Date(Date.now() + 60 * 60 * 1000),
-        },
-    })
-);
+// app.use(
+//     session({
+//         resave: true,
+//         saveUninitialized: true,
+//         secret: process.env.SESSION_SECRET,
+//         cookie: {
+//             secure: true,
+//             httpOnly: true,
+//             expires: new Date(Date.now() + 60 * 60 * 1000),
+//         },
+//     })
+// );
 app.use(cookieParser());
 
 db();
@@ -43,7 +42,7 @@ app.use(cors());
 app.use(
     "/api/v1",
     User,
-    Orders,
+    // Orders,
 );
 
 app.use(passport.initialize());
