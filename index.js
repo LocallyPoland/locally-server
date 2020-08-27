@@ -12,7 +12,7 @@ const passport = require("passport");
 const passportFBconfig = require('./src/api/passport/facebook.strategy');
 const {
     User,
-    // Orders,
+    Order,
 } = require("./src/api/routes");
 
 // parse application/x-www-form-urlencoded & application/json
@@ -42,7 +42,7 @@ app.use(cors());
 app.use(
     "/api/v1",
     User,
-    // Orders,
+    Order,
 );
 
 app.use(passport.initialize());
