@@ -5,3 +5,6 @@ module.exports = {
   User,
   Order
 };
+
+//TODO: variables for price and priceForCustomers 
+//TODO: variables for time when app will start working and stop working

@@ -16,7 +16,7 @@ passport.use(
   new strategyFB({
     clientID: process.env.FB_CLIENT_ID,
     clientSecret: process.env.FB_CLIENT_SECRET,
-    callbackURL: 'https://medtechnika.te.ua/api/v1/fb/cb',
+    callbackURL: `${process.env.BASE_URL}api/v1/fb/cb`,
     profileFields: ['name', 'email']
   },
     async (accessToken, refreshToken, profile, done) => {
