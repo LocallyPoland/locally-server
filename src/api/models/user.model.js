@@ -6,7 +6,7 @@ const User = new mongoose.Schema({
   email: String,
   phone: Number,
   password: String,
-  address: [{ type: mongoose.ObjectId, ref: "adress" }],
+  address: [{ type: mongoose.ObjectId, ref: "Address" }],
   gallery: String,
   role: Boolean,
   deletedAt: Date,

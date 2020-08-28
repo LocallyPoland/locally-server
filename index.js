@@ -14,6 +14,26 @@ const {
     Order,
 } = require("./src/api/routes");
 const { timeChecker } = require("./src/api/utils/timeCheck");
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: "Locally API",
+            description: "INFO Locally API",
+            contact: {
+                name: "Khanas"
+            },
+            servers: ["locahost"]
+        }
+    },
+    apis: ["index.js","./src/api/routes/user.route.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // parse application/x-www-form-urlencoded & application/json
 app.use(bodyParser.json());
@@ -40,9 +60,9 @@ app.use(passport.session());
 // use static
 app.use(express.static(path.resolve(__dirname, "./build")));
 
-app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "./build/index.html"));
-});
+// app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "./build/index.html"));
+// });
 
 // handle 404 (user errors)
 app.use((req, res, next) => {

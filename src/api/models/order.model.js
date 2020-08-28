@@ -5,18 +5,20 @@ const OrderSchema = new Schema({
   userID: { type: mongoose.ObjectId, ref: "users" },
   parcel: Array,
   sum: Number,
+  weight: Number,
+  length: Number,
   status: String,
   pickUp: String,
   deliveryCity: String,
   deliveryStreet: String,
   deliveryHouse: String,
   deliveryApartament: String,
-  deliveryWarehouse: String,
   paymentType: String,
   deletedAt: Date,
-}, {
-  timestamps: true
-}
+},
+  {
+    timestamps: true
+  }
 );
 
 const Order = mongoose.model("Order", OrderSchema, "orders");

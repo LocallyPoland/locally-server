@@ -2,14 +2,13 @@ const { User } = require("../../../models");
 
 module.exports = {
   updateUser: async (req, res) => {
-    const { id, fName, lName, phone, email, fatherName, gallery } = req.body;
+    const { id, fName, lName, phone, email, gallery } = req.body;
     return await User.findByIdAndUpdate(
       id, {
       fName,
       lName,
       phone,
       email,
-      fatherName,
       gallery,
     },
       (err, user) => {

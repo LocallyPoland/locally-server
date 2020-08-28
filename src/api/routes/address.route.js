@@ -5,11 +5,11 @@ const {
 
 const { verifyUserToken, verifyAdminToken } = require("../middleware/jwtAuth");
 
-app.get("/user/address", verifyUserToken, get.getAllUsers);
+app.get("/user/address", /*verifyUserToken,*/ get.getAllUsers);
 
 app.get("/user/address/:id", verifyUserToken, get.getUser);
 
-app.post("/address", post.register);
+app.post("/address", verifyUserToken, post.register);
 
 app.patch("/address/:id", verifyUserToken, patch.updateUser);
 

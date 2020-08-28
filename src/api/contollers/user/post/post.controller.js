@@ -3,44 +3,38 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 module.exports = {
+  /** 
+   * @swagger
+   *  /login:
+   *  post:
+   *    description: Use this route for Login
+   *    parameters:
+   *      -email
+   *      -password
+   *    responses:
+   *      '200':
+   *         description: Success
+   *      '400':
+   *        description: Bad Request
+   */
   login: (req, res) => {
     const { email, password } = req.body;
     const key = crypto.createHash("md5").update(password).digest("hex");
     return User.findOne({ email: email, password: key })
       .then((user) => {
-        if (user.email === email) {
-          if (user.password === key) {
-            if (user.role === true) {
-              const token = jwt.sign({ user: user },
-                process.env.SECRET_ADMIN, {
-                expiresIn: "1h",
-              }
-              );
-              res.cookie("token", token, {
-                expires: new Date(Date.now() + 90000000),
-                httpOnly: true,
-                secure: true,
-              });
-              //TODO user id send with cookie
-              res.json({ isAdmin: user.role, token });
-            } else {
-              const token = jwt.sign({ user: user }, process.env.SECRET, {
-                expiresIn: "1h",
-              });
-              res.cookie("token", token, {
-                expires: new Date(Date.now() + 90000000),
-                secure: true,
-                httpOnly: true,
-              });
-              res.send({ user, token });
-            }
-          } else {
-            console.log("err 1 ");
-            res.sendStatus(403);
-          }
+        if (user.role === true) {
+          const token = jwt.sign({ user: user }, process.env.SECRET_ADMIN);
+
+          res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+          });
+          //TODO user id send with cookie
+          res.json({ isAdmin: user.role, token });
         } else {
-          console.log("err 2 ");
-          res.sendStatus(403);
+          const token = jwt.sign({ user: user }, process.env.SECRET);
+
+          res.send({ user, token });
         }
       })
       .catch((err) => {
@@ -50,14 +44,13 @@ module.exports = {
   },
 
   register: async (req, res) => {
-    const { fName, lName, fatherName, phone, email, password } = req.body;
+    const { fName, lName, phone, email, password } = req.body;
     const key = crypto.createHash("md5").update(password).digest("hex");
     return await User.findOne({ email: email }).then((user) => {
       if (!user) {
         User.create({
           fName,
           lName,
-          fatherName,
           phone,
           email,
           password: key,

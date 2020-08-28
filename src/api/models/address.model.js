@@ -7,13 +7,11 @@ const AdressSchema = new Schema({
   deliveryStreet: String,
   deliveryHouse: String,
   deliveryApartament: String,
-  deliveryWarehouse: String,
-  paymentType: String,
   deletedAt: Date,
 }, {
   timestamps: true
 });
 
-const Adress = mongoose.model("Adress", AdressSchema, "adress");
+const Adress = mongoose.model("Adress", AdressSchema, "address");
 
 module.exports = Adress;

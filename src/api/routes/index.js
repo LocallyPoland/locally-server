@@ -1,9 +1,11 @@
 const User = require("./user.route");
 const Order = require("./order.route")
+const Address = require("./address.route")
 
 module.exports = {
   User,
-  Order
+  Order,
+  Address
 };
 
 //TODO: variables for price and priceForCustomers 
