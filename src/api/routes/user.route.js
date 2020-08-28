@@ -11,6 +11,8 @@ const { verifyUserToken, verifyAdminToken } = require("../middleware/jwtAuth");
  * @swagger
  *  /api/v1/users:
  *  get:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
@@ -29,6 +31,8 @@ app.get("/users", verifyAdminToken, get.getAllUsers);
  * @swagger
  *  /api/v1/user:
  *  get: 
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
@@ -47,6 +51,8 @@ app.get("/user", verifyUserToken, get.getUser);
  * @swagger
  *  /api/v1/login:
  *  post:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.body 
  *         name: email
@@ -74,6 +80,8 @@ app.get("/fb/cb", passport.authenticate('facebook', { failureRedirect: '/login',
  * @swagger
  *  /api/v1/register:
  *  post:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.body 
  *         name: fName
@@ -116,6 +124,8 @@ app.post("/change/password", post.changePassword);
  * @swagger
  *  /api/v1/user:
  *  patch:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
@@ -159,6 +169,8 @@ app.patch("/user", verifyUserToken, patch.updateUser);
  * @swagger
  *  /api/v1/user/:id:
  *  delete:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
@@ -182,6 +194,8 @@ app.delete("/user/:id", verifyAdminToken, delte.deleteUser);
  * @swagger
  *  /api/v1/user/restore/:id:
  *  patch:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
@@ -205,6 +219,8 @@ app.patch("/user/restore/:id", verifyAdminToken, patch.restoreUser);
  * @swagger
  *  /api/v1/user/soft-delete/:id:
  *  patch:
+ *    tags:
+ *    - User Routes
  *    parameters: 
  *       - in: req.headers
  *         name: Authorization
