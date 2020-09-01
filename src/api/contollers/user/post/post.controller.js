@@ -29,7 +29,6 @@ module.exports = {
             httpOnly: true,
             secure: true,
           });
-          //TODO user id send with cookie
           res.json({ isAdmin: user.role, token });
         } else {
           const token = jwt.sign({ user: user }, process.env.SECRET);
@@ -57,7 +56,7 @@ module.exports = {
           role: false,
         })
           .then((user) => {
-            const token = jwt.sign({ id: user._id }, process.env.SECRET, {
+            const token = jwt.sign({ user: user }, process.env.SECRET, {
               expiresIn: "1h",
             });
             res.send({ token, user });

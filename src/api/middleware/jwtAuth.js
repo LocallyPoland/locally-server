@@ -21,17 +21,18 @@ const verifyAdminToken = (req, res, next) => {
     // });
     //  ============================= REQ.HEADER TOKEN =========================================== 
     if (!token) {
-      return res.sendStatus(401);
+        return res.sendStatus(401);
     }
 
     jwt.verify(token, process.env.SECRET_ADMIN, (err, decoded) => {
-      console.error("DECODED === ", decoded);
-      if (err) {
-        console.error("ERROR WITH TOKEN === ", err);
-        return res.sendStatus(403)
-      };
-      req.body.id = decoded.user._id;
-      next();
+        console.error("DECODED === ", decoded);
+        if (err) {
+            console.error("ERROR WITH TOKEN === ", err);
+            return res.sendStatus(403)
+        }
+        ;
+        req.body.id = decoded.user._id;
+        next();
     });
 };
 
@@ -57,21 +58,21 @@ const verifyUserToken = (req, res, next) => {
 
     //  ============================= REQ.HEADER TOKEN =========================================== 
     if (!token) {
-      return res.sendStatus(401);
+        return res.sendStatus(401);
     }
 
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
-      if (err) {
-        console.log(err);
-        return res.sendStatus(403);
-      }
-      req.body.id = decoded.id;
-      next();
+        if (err) {
+            console.log(err);
+            return res.sendStatus(403);
+        }
+        req.body.id = decoded.id;
+        next();
     });
 };
 
 const tokenSwitcher = (req) => {
-    const { token, aToken } = req.cookies;
+    const {token, aToken} = req.cookies;
 
     if (token) {
         return verifyUserToken
@@ -80,6 +81,32 @@ const tokenSwitcher = (req) => {
         return verifyAdminToken
     }
 };
+
+const tokenVerify = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err) {
+                jwt.verify(token, process.env.SECRET_ADMIN, (err, decoded) => {
+                    if (err) {
+                        console.log(err)
+                        return res.sendStatus(403)
+                    }
+                    req.body.Admin = decoded.user.role;
+                    next();
+                })
+                console.log(err);
+                // return res.sendStatus(403);
+            }
+            req.body.id = decoded.user._id;
+            next();
+        }
+    );
+}
 
 module.exports = {
     verifyAdminToken,

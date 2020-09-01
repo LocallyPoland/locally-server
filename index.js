@@ -25,10 +25,10 @@ const swaggerOptions = {
             contact: {
                 name: "Khanas"
             },
-            servers: ["locahost"]
+            servers: ["locahost","https://locally-pl.herokuapp.com"]
         }
     },
-    apis: ["index.js","./src/api/routes/user.route.js"]
+    apis: ["index.js","./src/api/routes/user.route.js","./src/api/routes/order.route.js"]
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

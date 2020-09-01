@@ -1,60 +1,58 @@
-const { User } = require("../../../models");
+const {User} = require("../../../models");
 const jwt = require("jsonwebtoken");
-// const { restorePassword } = require("../mailer");
 
 module.exports = {
-  getAllUsers: async (req, res) => {
-    return await User.find({})
-      .then((users) => res.json(users))
-      .catch((err) => console.log(err));
-  },
+    getAllUsers: async (req, res) => {
+        const length = await User.countDocuments();
 
-  getUser: async (req, res) => {
-    const { id } = req.body;
-    return await User.findById(id)
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => err && res.sendStatus(409));
-  },
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
 
-  cbFb: (req, res) => {
-    const { user } = req;
-    console.log("FB USER === ", user);
+        const yearForSearch = new Date(`${year}-01-01`);
+        const monthForSearch = new Date(`${year}-0${month}-01`);
+        const quarterForSearch = new Date(`${year}-0${month - 3}-01`);
 
-    const token = jwt.sign({ id: user._id },
-      process.env.SECRET, {
-      expiresIn: "1h",
-    });
-    console.log("FB TOKEN === ", token);
+        const usersPerYear = await User.find({createdAt: {$gte: yearForSearch}});
+        const usersPerMonth = await User.find({createdAt: {$gte: monthForSearch}});
+        const usersPerQuarter = await User.find({createdAt: {$gte: quarterForSearch}});
 
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 90000000),
-      secure: true,
-      httpOnly: true,
-    });
+        res.send({
+            usersPerYear: usersPerYear.length,
+            usersPerMonth: usersPerMonth.length,
+            usersPerQuarter: usersPerQuarter.length,
+            allUsers: length
+        })
+    },
 
-    res.redirect("/api/v1/user");
-    // res.send({ token, user });
-  },
+    getUser: async (req, res) => {
+        const {id} = req.body;
+        return await User.findById(id)
+            .then((user) => {
+                res.json(user);
+            })
+            .catch((err) => {
+                console.error(err);
+                res.sendStatus(409)
+            });
+    },
 
-  cbGoogle: async (req, res) => {
-    const { user } = req;
-    console.log("GOOGLE USER === ", user);
+    cbFb: (req, res) => {
+        const {user} = req;
+        console.log("FB USER === ", user);
 
-    const token = jwt.sign({ id: user._id },
-      process.env.SECRET, {
-      expiresIn: "1h",
-    });
-    console.log("GOOGLE TOKEN === ", token);
+        const token = jwt.sign({id: user._id},
+            process.env.SECRET);
+        console.log("FB TOKEN === ", token);
 
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 90000000),
-      secure: true,
-      httpOnly: true,
-    });
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 90000000),
+            secure: true,
+            httpOnly: true,
+        });
 
-    res.redirect("/profile");
-    // res.send({ token, user });
-  }
+        res.redirect("/api/v1/user");
+        // res.send({ token, user });
+    },
+
 };
