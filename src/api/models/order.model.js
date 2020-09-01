@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-  userID: { type: mongoose.ObjectId, ref: "users" },
+  userID: { type: mongoose.ObjectId, ref: "User" },
   parcel: Array,
   sum: Number,
   weight: Number,
