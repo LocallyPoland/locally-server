@@ -12,8 +12,10 @@ const passportFBconfig = require('./src/api/passport/facebook.strategy');
 const {
     User,
     Order,
+    Address,
+    Settings
 } = require("./src/api/routes");
-const { timeChecker } = require("./src/api/utils/timeCheck");
+const {timeChecker} = require("./src/api/utils/timeCheck");
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 
@@ -25,10 +27,10 @@ const swaggerOptions = {
             contact: {
                 name: "Khanas"
             },
-            servers: ["locahost","https://locally-pl.herokuapp.com"]
+            servers: ["locahost", "https://locally-pl.herokuapp.com"]
         }
     },
-    apis: ["index.js","./src/api/routes/user.route.js","./src/api/routes/order.route.js"]
+    apis: ["index.js", "./src/api/routes/user.route.js", "./src/api/routes/order.route.js"]
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -37,7 +39,7 @@ app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // parse application/x-www-form-urlencoded & application/json
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(cookieParser());
 
@@ -52,6 +54,8 @@ app.use(
     "/api/v1", timeChecker,
     User,
     Order,
+    Address,
+    Settings
 );
 
 app.use(passport.initialize());
