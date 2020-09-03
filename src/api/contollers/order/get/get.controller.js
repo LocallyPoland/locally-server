@@ -1,16 +1,26 @@
 const {Order} = require("../../../models");
 
 const getAllOrders = async (req, res) => {
-
-    return await Order.find({})
+    const ordersHistory = await Order.find({$or: [{status: "cancelled"}, {status: "done"}]})
         .populate({
             path: "userID",
             select: "fName lName phone email -_id",
         })
-        .exec((err, news) => {
-            if (err) return res.send(err);
-            res.send(news);
-        });
+    // .exec((err, news) => {
+    //     if (err) return res.send(err);
+    //     res.send(news);
+    // });
+
+    const activeOrders = await Order.find({status: "created"})
+        .populate({
+            path: "userID",
+            select: "fName lName phone email -_id",
+        })
+    // .exec((err, news) => {
+    //     if (err) return res.send(err);
+    //     res.send(news);
+    // });
+    res.json({ordersHistory, activeOrders});
 };
 
 const getOrder = async (req, res) => {
@@ -139,7 +149,7 @@ const orderStats = async (req, res) => {
             const ordersPerMonth = await Order.aggregate([
                 {
                     $match: {
-                        createdAt: {$gte: monthFrom, $lte:monthTo }
+                        createdAt: {$gte: monthFrom, $lte: monthTo}
                     }
                 },
                 {

@@ -5,7 +5,7 @@ const {
 
 const {verifyUserToken, verifyAdminToken} = require("../middleware/jwtAuth");
 
-app.get("/order", verifyAdminToken, get.getAllOrders);
+app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
 
 /**
  * @swagger
