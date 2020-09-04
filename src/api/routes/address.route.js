@@ -3,7 +3,7 @@ const {
   get, delte, post, patch
 } = require("../contollers/address");
 
-const { verifyUserToken, verifyAdminToken } = require("../middleware/jwtAuth");
+const { verifyUserToken } = require("../middleware/jwtAuth");
 
 app.get("/user/address", /*verifyUserToken,*/ get.getAllAddress);
 
@@ -13,6 +13,6 @@ app.post("/address", verifyUserToken, post.createAddress);
 
 app.patch("/address/:id", verifyUserToken, patch.updateAddress);
 
-app.delete("/address/:id", verifyAdminToken, delte.deleteAddress);
+app.delete("/address/:id", verifyUserToken, delte.deleteAddress);
 
 module.exports = app;
