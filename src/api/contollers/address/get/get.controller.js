@@ -8,8 +8,8 @@ module.exports = {
     },
 
     getAddress: (req, res) => {
-        const {id} = req.params;
-        return Address.findById(id)
+        const {id} = req.body;
+        return Address.findOne({userID: id})
             .then((address) => res.json(address))
             .catch((err) => console.log(err));
     },
