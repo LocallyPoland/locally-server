@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
   userID: { type: mongoose.ObjectId, ref: "User" },
-  parcel: Array,
+  parcel: String,
   sum: Number,
   weight: Number,
   length: Number,
