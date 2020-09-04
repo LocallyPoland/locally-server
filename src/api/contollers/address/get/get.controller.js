@@ -9,7 +9,7 @@ module.exports = {
 
     getAddress: (req, res) => {
         const {id} = req.body;
-        return Address.findOne({userID: id})
+        return Address.find({userID: id})
             .then((address) => res.json(address))
             .catch((err) => console.log(err));
     },
