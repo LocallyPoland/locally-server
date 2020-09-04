@@ -1,6 +1,6 @@
 const { Order } = require("../../../models");
 
-const createOrder = async (req, res) => {
+const createOrder = (req, res) => {
   const {
     userID,
     products,
@@ -12,7 +12,7 @@ const createOrder = async (req, res) => {
     deliveryHouse,
     deliveryApartament,
   } = req.body;
-  await Order.create({
+  return  Order.create({
     userID,
     products,
     sum,
