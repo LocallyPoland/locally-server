@@ -64,9 +64,9 @@ app.use(passport.session());
 // use static
 app.use(express.static(path.resolve(__dirname, "./build")));
 
-// app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "./build/index.html"));
-// });
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "./build/index.html"));
+});
 
 // handle 404 (user errors)
 app.use((req, res, next) => {
