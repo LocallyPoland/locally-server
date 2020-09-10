@@ -24,7 +24,7 @@ const getAllOrders = async (req, res) => {
 };
 
 const getOrder = async (req, res) => {
-    const {id} = req.body;
+    const {id} = req.params;
     return await Order.findById(id).exec((err, order) => {
         if (err) return res.send(err);
         res.send(order);
