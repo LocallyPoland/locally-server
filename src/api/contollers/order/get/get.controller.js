@@ -29,7 +29,10 @@ const getOrder = async (req, res) => {
         path: "userID",
         select: "fName lName phone email _id",
     }).exec((err, order) => {
-        if (err) return res.send(err);
+        if (err) {
+            console.error(err)
+            res.sendStatus(400)
+        };
         res.send(order);
     });
 };
