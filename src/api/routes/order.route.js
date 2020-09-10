@@ -3,7 +3,7 @@ const {
     get, delte, post, patch
 } = require("../contollers/order");
 
-const {verifyUserToken, verifyAdminToken} = require("../middleware/jwtAuth");
+const {verifyUserToken, verifyAdminToken, tokenSwitcher} = require("../middleware/jwtAuth");
 
 app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
 
@@ -45,7 +45,7 @@ app.get("/order/stats", get.orderStats);
  *      '400':
  *        description: Bad Request
  */
-app.get("/order/:id", verifyAdminToken, get.getOrder);
+app.get("/order/:id", tokenSwitcher, get.getOrder);
 
 /**
  * @swagger

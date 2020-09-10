@@ -27,6 +27,7 @@ const getOrder = async (req, res) => {
     const {id} = req.params;
     return await Order.findById(id).populate({
         path: "userID",
+        select: "fName lName phone email _id",
     }).exec((err, order) => {
         if (err) return res.send(err);
         res.send(order);

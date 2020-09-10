@@ -1,10 +1,9 @@
 const {Variables} = require('../../../models');
 
 const updateSettings = async (req, res) => {
-    const {timeStart, timeStop, price, priceForCustomer} = req.body;
-    const defaultSettingsId = "5f4781753847c91fad9fd141";
-    const settings = await Variables.findByIdAndUpdate(defaultSettingsId, {
-        timeStart, timeStop, price, priceForCustomer
+    const {timeStart, timeStop, price, priceForCustomer, switcher} = req.body;
+    const settings = await Variables.findByIdAndUpdate(process.env.DEFAULT_SETTINGS_ID, {
+        timeStart, timeStop, price, priceForCustomer, switcher
     });
     res.send(settings);
 }

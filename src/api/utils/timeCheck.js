@@ -5,7 +5,7 @@ const timeChecker = (req, res, next) => {
     .then(variable => {
       console.log("variables === ", variable);
       const time = new Date;
-      if (variable.timeStart === time.getHours() && variable.timeStop === time.getHours()) {
+      if (variable.timeStart === time.getHours() && variable.timeStop === time.getHours() && !variable.switcher) {
         res.send({ error: true })
       } else {
         next();
