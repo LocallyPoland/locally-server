@@ -237,6 +237,9 @@ app.patch("/order/:id", verifyAdminToken, patch.updateOrder);
  */
 app.delete("/order/:id", verifyAdminToken, delte.deleteOrder);
 
+app.get("/history", /*verifyAdminToken,*/ get.getOrdersHistory);
+
+
 // app.patch("/order/restore/:id", verifyAdminToken, patch.restoreUser);
 
 // app.patch("/order/soft-delete/:id", verifyAdminToken, delte.softDeleteUser);

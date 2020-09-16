@@ -6,20 +6,13 @@ const getAllOrders = async (req, res) => {
             path: "userID",
             select: "fName lName phone email -_id",
         })
-    // .exec((err, news) => {
-    //     if (err) return res.send(err);
-    //     res.send(news);
-    // });
 
     const activeOrders = await Order.find({status: "created"})
         .populate({
             path: "userID",
             select: "fName lName phone email -_id",
         })
-    // .exec((err, news) => {
-    //     if (err) return res.send(err);
-    //     res.send(news);
-    // });
+
     res.json({ordersHistory, activeOrders});
 };
 
@@ -32,7 +25,8 @@ const getOrder = async (req, res) => {
         if (err) {
             console.error(err)
             res.sendStatus(400)
-        };
+        }
+        ;
         res.send(order);
     });
 };
@@ -182,4 +176,77 @@ const orderStats = async (req, res) => {
 
 }
 
-module.exports = {getAllOrders, getOrder, userOrderHistory, orderStats};
+const getOrdersHistory = async (req, res) => {
+    const {from, to, status, sort, search} = req.query;
+    const formattedFrom = new Date(from);
+    const formattedTo = new Date(to);
+
+    const sortForSearch = () => {
+        if (sort === "up") return {
+            createdAt: -1
+        }
+        if (sort === "down") return {createdAt: 1}
+        if (sort === undefined) return {createdAt: -1}
+    }
+
+    const formattedStatus = () => {
+        if (!status) {
+            return {status: {$in: ['done', 'cancelled']}}
+        }
+        return {status: status}
+    };
+
+    if (search) {
+        const searchedHistory = await Order.aggregate([
+            {
+                $match: {status: {$in: ['done', 'cancelled']}}
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userID",
+                    foreignField: "_id",
+                    as: "userID",
+                },
+            },
+            {
+                $match: {
+                    $or: [
+                        {"userID.email": {$regex: search}},
+                        {"userID.phone": +search},
+                        {"numOfOrder": {$regex: search}}
+                    ]
+                }
+            },
+        ])
+        res.send({history: searchedHistory});
+    } else {
+
+        const filteredHistory = await Order.aggregate([
+                {
+                    $match: {
+                        createdAt: {$gte: formattedFrom, $lte: formattedTo}
+                    }
+                },
+                {
+                    $match: formattedStatus()
+                },
+                {
+                    $sort: sortForSearch()
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "userID",
+                        foreignField: "_id",
+                        as: "userID",
+                    },
+                },
+            ])
+        ;
+        res.send({history: filteredHistory});
+    }
+
+}
+
+module.exports = {getAllOrders, getOrder, userOrderHistory, orderStats, getOrdersHistory};

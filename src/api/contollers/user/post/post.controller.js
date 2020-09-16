@@ -3,20 +3,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 module.exports = {
-    /**
-     * @swagger
-     *  /login:
-     *  post:
-     *    description: Use this route for Login
-     *    parameters:
-     *      -email
-     *      -password
-     *    responses:
-     *      '200':
-     *         description: Success
-     *      '400':
-     *        description: Bad Request
-     */
+
     login: (req, res) => {
         const {email, password} = req.body;
         const key = crypto.createHash("md5").update(password).digest("hex");
