@@ -26,7 +26,6 @@ const getOrder = async (req, res) => {
             console.error(err)
             res.sendStatus(400)
         }
-        ;
         res.send(order);
     });
 };
