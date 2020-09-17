@@ -189,6 +189,7 @@ const getOrdersHistory = async (req, res) => {
             }
         }
     }
+    console.log(sortByDate())
 
     const sortForSearch = () => {
         if (sort === "up") return {
