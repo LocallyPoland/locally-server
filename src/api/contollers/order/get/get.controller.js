@@ -181,7 +181,7 @@ const getOrdersHistory = async (req, res) => {
     const sortByDate = () => {
         if (from === undefined && to === undefined) {
             return {
-                createdAt: {$gte: new Date(0), $lte: Date.now()}
+                createdAt: {$gte: new Date(0), $lte: new Date()}
             }
         } else {
             return {
