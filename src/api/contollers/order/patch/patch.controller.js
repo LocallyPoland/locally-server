@@ -9,6 +9,7 @@ const updateOrder = async (res, req) => {
                 console.log(err);
                 res.sendStatus(400)
             }
+            res.sendStatus(200)
         })
     // } catch (e) {
     //     console.log(e);
