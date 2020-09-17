@@ -210,7 +210,7 @@ app.post("/order", verifyUserToken, post.createOrder);
  *      '400':
  *        description: Bad Request
  */
-app.patch("/order/:id", verifyAdminToken, patch.updateOrder);
+app.patch("/order/:id", /*verifyAdminToken,*/ patch.updateOrder);
 
 /**
  * @swagger
