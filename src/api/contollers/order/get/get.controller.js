@@ -177,8 +177,6 @@ const orderStats = async (req, res) => {
 
 const getOrdersHistory = async (req, res) => {
     const {from, to, status, sort, search} = req.query;
-    console.log('QUERY === ', req.query)
-    console.log('FROM/TO === ', formattedFrom, formattedTo)
 
     const sortByDate = () => {
         if (from === undefined && to === undefined) {
