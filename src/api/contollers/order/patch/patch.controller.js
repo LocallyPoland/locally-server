@@ -1,8 +1,10 @@
 const {Order} = require("../../../models");
 
 const updateOrder = async (res, req) => {
-    // try {
+    try {
         const {id} = req.params;
+        console.log(req.query)
+        console.log(req.params)
         const {status} = req.body;
         return await Order.findByIdAndUpdate(id, {status}).exec(err => {
             if (err) {
@@ -11,10 +13,10 @@ const updateOrder = async (res, req) => {
             }
             res.sendStatus(200)
         })
-    // } catch (e) {
-    //     console.log(e);
-    //     res.sendStatus(400)
-    // }
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(400)
+    }
 }
 
 module.exports = {
