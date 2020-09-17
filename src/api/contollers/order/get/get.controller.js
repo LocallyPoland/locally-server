@@ -180,7 +180,7 @@ const getOrdersHistory = async (req, res) => {
     console.log('QUERY === ', req.query)
     const formattedFrom = new Date(from) || new Date(0);
     const formattedTo = new Date(to) || Date.now();
-    console.log('FROM/TO === ', from, to)
+    console.log('FROM/TO === ', formattedFrom, formattedTo)
 
     const sortForSearch = () => {
         if (sort === "up") return {
