@@ -189,7 +189,6 @@ const getOrdersHistory = async (req, res) => {
             }
         }
     }
-    console.log(sortByDate())
 
     const sortForSearch = () => {
         if (sort === "up") return {
@@ -200,7 +199,7 @@ const getOrdersHistory = async (req, res) => {
     }
 
     const formattedStatus = () => {
-        if (!status) {
+        if (status === "undefined") {
             return {status: {$in: ['done', 'cancelled']}}
         }
         return {status: status}
