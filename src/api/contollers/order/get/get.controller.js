@@ -177,6 +177,7 @@ const orderStats = async (req, res) => {
 
 const getOrdersHistory = async (req, res) => {
     const {from, to, status, sort, search} = req.query;
+    console.log('QUERY === ',req.query)
     const formattedFrom = new Date(from);
     const formattedTo = new Date(to);
 
@@ -241,8 +242,7 @@ const getOrdersHistory = async (req, res) => {
                         as: "userID",
                     },
                 },
-            ])
-        ;
+            ]);
         res.send({history: filteredHistory});
     }
 
