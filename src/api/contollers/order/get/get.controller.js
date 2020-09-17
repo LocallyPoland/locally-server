@@ -177,9 +177,10 @@ const orderStats = async (req, res) => {
 
 const getOrdersHistory = async (req, res) => {
     const {from, to, status, sort, search} = req.query;
-    console.log('QUERY === ',req.query)
+    console.log('QUERY === ', req.query)
     const formattedFrom = new Date(from);
     const formattedTo = new Date(to);
+    console.log('FROM/TO === ', from, to)
 
     const sortForSearch = () => {
         if (sort === "up") return {
@@ -223,26 +224,26 @@ const getOrdersHistory = async (req, res) => {
     } else {
 
         const filteredHistory = await Order.aggregate([
-                {
-                    $match: {
-                        createdAt: {$gte: formattedFrom, $lte: formattedTo}
-                    }
+            {
+                $match: {
+                    createdAt: {$gte: formattedFrom, $lte: formattedTo}
+                }
+            },
+            {
+                $match: formattedStatus()
+            },
+            {
+                $sort: sortForSearch()
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userID",
+                    foreignField: "_id",
+                    as: "userID",
                 },
-                {
-                    $match: formattedStatus()
-                },
-                {
-                    $sort: sortForSearch()
-                },
-                {
-                    $lookup: {
-                        from: "users",
-                        localField: "userID",
-                        foreignField: "_id",
-                        as: "userID",
-                    },
-                },
-            ]);
+            },
+        ]);
         res.send({history: filteredHistory});
     }
 
