@@ -179,7 +179,7 @@ const getOrdersHistory = async (req, res) => {
     const {from, to, status, sort, search} = req.query;
 
     const sortByDate = () => {
-        if ((from === undefined && to === undefined) ||( from === "undefined"&& to === "undefined")) {
+        if ((from === undefined && to === undefined) || (from === "undefined" && to === "undefined")) {
             return {
                 createdAt: {$gte: new Date(0), $lte: new Date()}
             }
@@ -191,11 +191,9 @@ const getOrdersHistory = async (req, res) => {
     }
 
     const sortForSearch = () => {
-        if (sort === "up") return {
-            createdAt: -1
-        }
+        if (sort === "up") return {createdAt: -1}
         if (sort === "down") return {createdAt: 1}
-        if (sort === undefined) return {createdAt: -1}
+        if (sort === "undefined") return {createdAt: -1}
     }
 
     const formattedStatus = () => {
