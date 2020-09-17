@@ -1,9 +1,7 @@
 const {Order} = require("../../../models");
 
-const updateOrder = async (res, req) => {
+const updateOrder = async (req, res) => {
     try {
-        console.log(req.query)
-        console.log(req.params)
         const {id} = req.params;
         const {status} = req.body;
         return await Order.findByIdAndUpdate(id, {status}).exec(err => {
