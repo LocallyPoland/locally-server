@@ -38,51 +38,52 @@ const verifyAdminToken = (req, res, next) => {
 };
 
 const verifyUserToken = (req, res, next) => {
-    // const authHeader = req.headers.authorization;
-    // const token = authHeader && authHeader.split(" ")[1];
-    const cookieToken = req.cookies.token;
-    console.log("Cookie token === ", cookieToken);
-
-    if (!cookieToken) {
-        return res.sendStatus(401);
-    }
-
-    jwt.verify(cookieToken, process.env.SECRET, (err, decoded) => {
-        console.error("DECODED === ", decoded);
-        if (err) {
-            console.error("ERROR WITH TOKEN === ", err);
-            return res.sendStatus(403)
-        }
-        ;
-        req.body.id = decoded._id;
-        next();
-    });
-
-    //  ============================= REQ.HEADER TOKEN =========================================== 
-    // if (!token) {
+    // const cookieToken = req.cookies.token;
+    // console.log("Cookie token === ", cookieToken);
+    //
+    // if (!cookieToken) {
     //     return res.sendStatus(401);
     // }
     //
-    // jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    // jwt.verify(cookieToken, process.env.SECRET, (err, decoded) => {
+    //     console.error("DECODED === ", decoded);
     //     if (err) {
-    //         console.log(err);
-    //         return res.sendStatus(403);
+    //         console.error("ERROR WITH TOKEN === ", err);
+    //         return res.sendStatus(403)
     //     }
-    //     req.body.id = decoded.id;
+    //     ;
+    //     req.body.id = decoded._id;
     //     next();
     // });
+
+    //  ============================= REQ.HEADER TOKEN =========================================== 
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+        return res.sendStatus(401);
+    }
+
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(403);
+        }
+        req.body.id = decoded.id;
+        next();
+    });
 };
 
-const tokenSwitcher = (req,res,next) => {
+const tokenSwitcher = (req, res, next) => {
     try {
         if (req.cookies.token) {
-            return verifyUserToken(req,res,next)
+            return verifyUserToken(req, res, next)
         }
     } catch (e) {
         console.log(e)
     }
     if (req.cookies.aToken) {
-        return verifyAdminToken(req,res,next)
+        return verifyAdminToken(req, res, next)
     }
 };
 

@@ -3,7 +3,7 @@ const {Address} = require('../../../models');
 module.exports = {
     createAddress: (req, res) => {
         const {
-            userID,
+            id,
             deliveryCity,
             deliveryStreet,
             deliveryHouse,
@@ -11,7 +11,7 @@ module.exports = {
         } = req.body;
 
         return Address.create({
-            userID,
+            userID:id,
             deliveryCity,
             deliveryStreet,
             deliveryHouse,
