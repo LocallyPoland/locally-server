@@ -7,29 +7,23 @@ const createOrder = (req, res) => {
     sum,
     status,
     paymentType,
-    deliveryCity,
-    deliveryStreet,
-    deliveryHouse,
-    deliveryApartament,
+    deliveryAddress
   } = req.body;
-  return  Order.create({
+  return Order.create({
     userID,
     products,
     sum,
     status,
-    deliveryCity,
-    deliveryStreet,
-    deliveryHouse,
-    deliveryApartament,
+    deliveryAddress,
     paymentType,
     createdAt: Date.now(),
     updatedAt: Date.now(),
-    deletedAt: null,
+    deletedAt: null
   })
-    .then((order) => res.send(order))
-    .catch((err) => err && res.sendStatus(400));
+    .then(order => res.send(order))
+    .catch(err => err && res.sendStatus(400));
 };
 
 module.exports = {
   createOrder
-}
+};
