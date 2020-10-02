@@ -1,9 +1,11 @@
 const app = require("express").Router();
-const {
-    get, delte, post, patch
-} = require("../contollers/order");
+const { get, delte, post, patch } = require("../contollers/order");
 
-const {verifyUserToken, verifyAdminToken, tokenSwitcher} = require("../middleware/jwtAuth");
+const {
+  verifyUserToken,
+  verifyAdminToken,
+  tokenSwitcher
+} = require("../../../../CRM/src/api/middleware/jwtAuth");
 
 app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
 
@@ -46,6 +48,8 @@ app.get("/order/stats", get.orderStats);
  *        description: Bad Request
  */
 app.get("/order/:id", tokenSwitcher, get.getOrder);
+
+app.get("/user/history", verifyUserToken, get.userOrderHistory);
 
 /**
  * @swagger
@@ -238,7 +242,6 @@ app.patch("/order/:id", /*verifyAdminToken,*/ patch.updateOrder);
 app.delete("/order/:id", verifyAdminToken, delte.deleteOrder);
 
 app.get("/history", /*verifyAdminToken,*/ get.getOrdersHistory);
-
 
 // app.patch("/order/restore/:id", verifyAdminToken, patch.restoreUser);
 

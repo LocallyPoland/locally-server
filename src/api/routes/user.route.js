@@ -1,11 +1,12 @@
 const app = require("express").Router();
+const { get, delte, post, patch } = require("../contollers/user");
+
+const passport = require("passport");
+
 const {
-    get, delte, post, patch
-} = require("../contollers/user");
-
-const passport = require('passport');
-
-const {verifyUserToken, verifyAdminToken} = require("../middleware/jwtAuth");
+  verifyUserToken,
+  verifyAdminToken
+} = require("../../../../CRM/src/api/middleware/jwtAuth");
 
 /**
  * @swagger
@@ -72,9 +73,16 @@ app.get("/user", verifyUserToken, get.getUser);
  */
 app.post("/login", post.login);
 
-app.get("/login/fb", passport.authenticate('facebook', {scope: ['email']}));
+app.get("/login/fb", passport.authenticate("facebook", { scope: ["email"] }));
 
-app.get("/fb/cb", passport.authenticate('facebook', {failureRedirect: '/login', session: false}), get.cbFb);
+app.get(
+  "/fb/cb",
+  passport.authenticate("facebook", {
+    failureRedirect: "/login",
+    session: false
+  }),
+  get.cbFb
+);
 
 /**
  * @swagger

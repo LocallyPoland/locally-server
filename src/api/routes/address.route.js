@@ -1,9 +1,9 @@
 const app = require("express").Router();
-const {
-  get, delte, post, patch
-} = require("../contollers/address");
+const { get, delte, post, patch } = require("../contollers/address");
 
-const { verifyUserToken } = require("../middleware/jwtAuth");
+const {
+  verifyUserToken
+} = require("../../../../CRM/src/api/middleware/jwtAuth");
 
 app.get("/user/address", /*verifyUserToken,*/ get.getAllAddress);
 
