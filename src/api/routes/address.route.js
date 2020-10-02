@@ -3,7 +3,7 @@ const { get, delte, post, patch } = require("../contollers/address");
 
 const {
   verifyUserToken
-} = require("../../../../CRM/src/api/middleware/jwtAuth");
+} = require("../middleware/jwtAuth");
 
 app.get("/user/address", /*verifyUserToken,*/ get.getAllAddress);
 

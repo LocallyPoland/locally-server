@@ -5,7 +5,7 @@ const {
   verifyUserToken,
   verifyAdminToken,
   tokenSwitcher
-} = require("../../../../CRM/src/api/middleware/jwtAuth");
+} = require("../middleware/jwtAuth");
 
 app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
 

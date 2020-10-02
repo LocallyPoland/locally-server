@@ -6,7 +6,7 @@ const passport = require("passport");
 const {
   verifyUserToken,
   verifyAdminToken
-} = require("../../../../CRM/src/api/middleware/jwtAuth");
+} = require("../middleware/jwtAuth");
 
 /**
  * @swagger

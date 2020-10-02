@@ -4,7 +4,7 @@ const { get, delte, post, patch } = require("../contollers/variables");
 const {
   verifyUserToken,
   verifyAdminToken
-} = require("../../../../CRM/src/api/middleware/jwtAuth");
+} = require("../middleware/jwtAuth");
 
 app.get("/settings", /*verifyUserToken,*/ get.getSettings);
 
