@@ -50,7 +50,7 @@ const verifyUserToken = (req, res, next) => {
             console.log(err);
             return res.sendStatus(403);
         }
-        req.body.id = decoded.id;
+        req.body.user = decoded.user;
         next();
     });
 };
