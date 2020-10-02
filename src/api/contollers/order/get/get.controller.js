@@ -33,7 +33,7 @@ const getOrder = async (req, res) => {
 const userOrderHistory = (req, res) => {
     const {user} = req.body;
 
-    Order.find({userID: user.id})
+    Order.find({userID: user._id})
         .exec((err, orders) => {
             if (err) {
                 res.sendStatus(400)
