@@ -3,19 +3,28 @@ const { Order } = require("../../../models");
 const createOrder = (req, res) => {
   const {
     userID,
-    products,
+    parcel,
     sum,
+    weight,
+    length,
     status,
+    pickUp,
     paymentType,
-    deliveryAddress
+    deliveryAddress,
+    deliveryTime
   } = req.body;
+
   return Order.create({
     userID,
-    products,
+    parcel,
     sum,
+    weight,
+    length,
     status,
-    deliveryAddress,
+    pickUp,
     paymentType,
+    deliveryAddress,
+    deliveryTime,
     createdAt: Date.now(),
     updatedAt: Date.now(),
     deletedAt: null
