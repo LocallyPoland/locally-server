@@ -15,7 +15,8 @@ const verifyAdminToken = (req, res, next) => {
         if (err) {
             console.error("ERROR WITH TOKEN === ", err);
             return res.sendStatus(403)
-        };
+        }
+        ;
         req.body.id = decoded.user._id;
         next();
     });

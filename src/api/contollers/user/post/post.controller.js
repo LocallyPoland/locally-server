@@ -1,6 +1,10 @@
 const {User} = require("../../../models");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const sendEmail = require('gmail-send')({
+    user: 'locallypoland@gmail.com',
+    pass: 'locallyPoland2020',
+});
 
 module.exports = {
 
@@ -29,10 +33,10 @@ module.exports = {
             });
     },
 
-    register: async (req, res) => {
+    register: (req, res) => {
         const {fName, lName, phone, email, password} = req.body;
         const key = crypto.createHash("md5").update(password).digest("hex");
-        return await User.findOne({email: email}).then((user) => {
+        return User.findOne({email: email}).then((user) => {
             if (!user) {
                 User.create({
                     fName,
@@ -59,28 +63,51 @@ module.exports = {
     },
 
     changePassword: async (req, res) => {
-        const {email, password} = req.body;
+        const {email, code, password} = req.body;
         const key = crypto.createHash("md5").update(password).digest("hex");
-        return await User.findOne({email: email}, {password: key})
+        return await User.findOneAndUpdate(
+            {$and: [{email: email}, {password: code}]},
+            {password: key},
+            {new: true}
+        )
             .then((user) => {
-                // jwt.verify()
-                res.send("pass changed successfully");
+                if (user) {
+                    res.status(200).send("pass changed successfully");
+                } else {
+                    res.sendStatus(400)
+                }
             })
             .catch((err) => res.send(err));
     },
 
     restorePassword: async (req, res) => {
         const {email} = req.body;
-        return await User.findOne({email: email})
-            .then((user) => {
+        const date = new Date();
+        const randomizerPass = `${date.getMilliseconds()}${date.getSeconds()}`
+
+        return await User.findOneAndUpdate({email: email}, {password: randomizerPass})
+            .then(async (user) => {
                 if (user) {
-                    // restorePassword(email);
-                    // jwt.sign()
+                    try {
+                        const {result, full} = await sendEmail({
+                            user: 'locallypoland@gmail.com',
+                            pass: 'locallyPoland2020',
+                            to: email,
+                            subject: 'test',
+                            text: randomizerPass
+                        });
+                        // console.log(result, full)
+                    } catch (error) {
+                        console.error('ERROR', error);
+                    }
                     res.sendStatus(200);
                 } else {
                     res.sendStatus(400);
                 }
             })
-            .catch((err) => err && res.sendStatus(409));
+            .catch((err) => {
+                console.log(err)
+                res.sendStatus(409)
+            });
     },
 }
