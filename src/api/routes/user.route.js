@@ -125,6 +125,8 @@ app.get(
  */
 app.post("/register", post.register);
 
+app.get("/verifyEmail", get.verifyEmail);
+
 app.post("/restore/password", post.restorePassword);
 
 app.post("/change/password", post.changePassword);

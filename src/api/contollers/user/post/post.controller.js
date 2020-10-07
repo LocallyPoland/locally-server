@@ -46,10 +46,17 @@ module.exports = {
                     password: key,
                     role: false,
                 })
-                    .then((user) => {
+                    .then(async (user) => {
                         const token = jwt.sign({user: user}, process.env.SECRET, {
                             expiresIn: "1h",
                         });
+                        await sendEmail({
+                            user: 'locallypoland@gmail.com',
+                            pass: 'locallyPoland2020',
+                            to: email,
+                            subject: 'Verify Email',
+                            text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
+                        })
                         res.send({token, user});
                     })
                     .catch((err) => {

@@ -54,5 +54,14 @@ module.exports = {
         res.redirect("/api/v1/user");
         // res.send({ token, user });
     },
-
+    verifyEmail: async (req, res) => {
+        try {
+            const {email} = req.query;
+            const updated = await User.findOneAndUpdate({email: email}, {isVerified: true}, {new: true})
+            res.send('Email Verified').status(200);
+        } catch (e) {
+            console.log(e)
+            res.sendStatus(400);
+        }
+    }
 };

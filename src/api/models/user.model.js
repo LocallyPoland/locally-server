@@ -9,6 +9,7 @@ const User = new mongoose.Schema({
   address: [{ type: mongoose.ObjectId, ref: "Address" }],
   gallery: String,
   role: Boolean,
+  isVerified: Boolean,
   deletedAt: Date,
 },
   {
