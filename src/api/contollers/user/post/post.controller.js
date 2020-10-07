@@ -5,6 +5,14 @@ const sendEmail = require('gmail-send')({
     user: 'locallypoland@gmail.com',
     pass: 'locallyPoland2020',
 });
+const nodeMailer = require('nodemailer');
+const SMTPTransporter = nodeMailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'locallypoland@gmail.com',
+        pass: 'locallyPoland2020',
+    }
+})
 
 module.exports = {
 
@@ -51,18 +59,31 @@ module.exports = {
                         const token = jwt.sign({user: user}, process.env.SECRET, {
                             expiresIn: "1h",
                         });
-                        try {
-                            const {result, full} = await sendEmail({
-                                user: 'locallypoland@gmail.com',
-                                pass: 'locallyPoland2020',
-                                to: email,
-                                subject: 'test',
-                                text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
-                            });
-                            console.log(result, full)
-                        } catch (error) {
-                            console.error('ERROR', error);
-                        }
+
+                        SMTPTransporter.sendMail({
+                            from: 'locallypoland@gmail.com',
+                            to: email,
+                            subject: 'test',
+                            html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>>`
+                        }, function (err, info) {
+                            if (err) {
+                                console.error(err)
+                            } else {
+                                console.log(info)
+                            }
+                        })
+                        // try {
+                        //     const {result, full} = await sendEmail({
+                        //         user: 'locallypoland@gmail.com',
+                        //         pass: 'locallyPoland2020',
+                        //         to: email,
+                        //         subject: 'test',
+                        //         text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
+                        //     });
+                        //     console.log(result, full)
+                        // } catch (error) {
+                        //     console.error('ERROR', error);
+                        // }
                         //                                text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
                         res.send({token, user});
                     })
