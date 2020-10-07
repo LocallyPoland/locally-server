@@ -43,6 +43,7 @@ module.exports = {
                     lName,
                     phone,
                     email,
+                    isVerified:false,
                     password: key,
                     role: false,
                 })
