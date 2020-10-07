@@ -115,7 +115,7 @@ module.exports = {
                             user: 'locallypoland@gmail.com',
                             pass: 'locallyPoland2020',
                             to: email,
-                            subject: 'LocallyApp ---> Verify Your Email',
+                            subject: 'LocallyApp ---> Verify Your Email ',
                             text: randomizerPass
                         });
                         // console.log(result, full)
