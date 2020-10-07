@@ -52,19 +52,19 @@ module.exports = {
                             expiresIn: "1h",
                         });
                         try {
-                            await sendEmail({
+                            const {result, full} = await sendEmail({
                                 user: 'locallypoland@gmail.com',
                                 pass: 'locallyPoland2020',
                                 to: email,
-                                subject: 'Verify Email',
+                                subject: 'test',
                                 text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
-                            })
-                            res.send({token, user});
-                        } catch (e) {
-                            console.error(e);
-                            res.sendStatus(500)
+                            });
+                            console.log(result, full)
+                        } catch (error) {
+                            console.error('ERROR', error);
                         }
-
+                        //                                text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
+                        res.send({token, user});
                     })
                     .catch((err) => {
                         console.log(err);
