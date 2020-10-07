@@ -64,7 +64,7 @@ module.exports = {
                             from: 'locallypoland@gmail.com',
                             to: email,
                             subject: 'test',
-                            html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>>`
+                            html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
                         }, function (err, info) {
                             if (err) {
                                 console.error(err)
@@ -72,19 +72,6 @@ module.exports = {
                                 console.log(info)
                             }
                         })
-                        // try {
-                        //     const {result, full} = await sendEmail({
-                        //         user: 'locallypoland@gmail.com',
-                        //         pass: 'locallyPoland2020',
-                        //         to: email,
-                        //         subject: 'test',
-                        //         text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
-                        //     });
-                        //     console.log(result, full)
-                        // } catch (error) {
-                        //     console.error('ERROR', error);
-                        // }
-                        //                                text: `https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}`
                         res.send({token, user});
                     })
                     .catch((err) => {
