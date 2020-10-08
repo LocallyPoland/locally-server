@@ -53,7 +53,7 @@ module.exports = {
                         res.send({user, token});
                     }
                 } else {
-                    res.send('No such User').status(409)
+                    res.sendStatus(409)
                 }
             })
             .catch((err) => {
