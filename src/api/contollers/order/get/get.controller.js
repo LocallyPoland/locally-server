@@ -12,7 +12,6 @@ const getAllOrders = async (req, res) => {
             path: "userID",
             select: "fName lName phone email -_id",
         })
-
     res.json({ordersHistory, activeOrders});
 };
 

@@ -39,18 +39,21 @@ module.exports = {
         const key = crypto.createHash("md5").update(password).digest("hex");
         return User.findOne({email: email, password: key})
             .then((user) => {
-                if (user.role === true) {
-                    const token = jwt.sign({user: user}, process.env.SECRET_ADMIN);
+                if (!user) {
+                    if (user.role === true) {
+                        const token = jwt.sign({user: user}, process.env.SECRET_ADMIN);
 
-                    res.cookie("aToken", token, {
-                        httpOnly: true,
-                        secure: true,
-                    });
-                    res.json({isAdmin: user.role});
+                        res.cookie("aToken", token, {
+                            httpOnly: true,
+                            secure: true,
+                        });
+                        res.json({isAdmin: user.role});
+                    } else {
+                        const token = jwt.sign({user: user}, process.env.SECRET);
+                        res.send({user, token});
+                    }
                 } else {
-                    const token = jwt.sign({user: user}, process.env.SECRET);
-
-                    res.send({user, token});
+                    res.send('No such User').status(409)
                 }
             })
             .catch((err) => {
