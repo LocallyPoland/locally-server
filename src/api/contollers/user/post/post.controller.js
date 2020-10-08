@@ -18,8 +18,8 @@ const gmailSender = nodeMailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: "locallypoland@gmail.com",
-        pass: "locallyPoland2021"
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
     }
 })
 
@@ -84,7 +84,7 @@ module.exports = {
                         gmailSender.sendMail({
                                 from: 'locallypoland@gmail.com',
                                 to: email,
-                                subject: 'test',
+                                subject: 'Verify Your Email',
                                 html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
                             }, function (err, info) {
                                 if (err) {
