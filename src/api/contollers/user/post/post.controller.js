@@ -22,6 +22,15 @@ const gmailSender = nodeMailer.createTransport({
         pass: process.env.SMTP_PASS
     }
 })
+const sendGridSender = nodeMailer.createTransport({
+    host: "smtp.sendgrid.net",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_API_KEY_GMAIL
+    }
+})
 
 module.exports = {
 
@@ -81,7 +90,20 @@ module.exports = {
                         //         console.log(info)
                         //     }
                         // })
-                        gmailSender.sendMail({
+                        // gmailSender.sendMail({
+                        //         from: 'locallypoland@gmail.com',
+                        //         to: email,
+                        //         subject: 'Verify Your Email',
+                        //         html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
+                        //     }, function (err, info) {
+                        //         if (err) {
+                        //             console.error(err)
+                        //         } else {
+                        //             console.log(info)
+                        //         }
+                        //     }
+                        // )
+                        sendGridSender.sendMail({
                                 from: 'locallypoland@gmail.com',
                                 to: email,
                                 subject: 'Verify Your Email',
