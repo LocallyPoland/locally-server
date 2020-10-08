@@ -13,6 +13,15 @@ const SMTPTransporter = nodeMailer.createTransport({
         pass: 'locallyPoland2020',
     }
 })
+const gmailSender = nodeMailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: "locallypoland@gmail.com",
+        pass: "locallyPoland2021"
+    }
+})
 
 module.exports = {
 
@@ -60,18 +69,31 @@ module.exports = {
                             expiresIn: "1h",
                         });
 
-                        SMTPTransporter.sendMail({
-                            from: 'locallypoland@gmail.com',
-                            to: email,
-                            subject: 'test',
-                            html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
-                        }, function (err, info) {
-                            if (err) {
-                                console.error(err)
-                            } else {
-                                console.log(info)
+                        // SMTPTransporter.sendMail({
+                        //     from: 'locallypoland@gmail.com',
+                        //     to: email,
+                        //     subject: 'test',
+                        //     html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
+                        // }, function (err, info) {
+                        //     if (err) {
+                        //         console.error(err)
+                        //     } else {
+                        //         console.log(info)
+                        //     }
+                        // })
+                        gmailSender.sendMail({
+                                from: 'locallypoland@gmail.com',
+                                to: email,
+                                subject: 'test',
+                                html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
+                            }, function (err, info) {
+                                if (err) {
+                                    console.error(err)
+                                } else {
+                                    console.log(info)
+                                }
                             }
-                        })
+                        )
                         res.send({token, user});
                     })
                     .catch((err) => {

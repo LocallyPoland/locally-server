@@ -13,7 +13,7 @@ const createOrder = (req, res) => {
         deliveryAddress,
         deliveryTime
     } = req.body;
-    console.log(user);
+
     return Order.create({
         userID: user._id,
         parcel,
