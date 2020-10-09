@@ -39,7 +39,6 @@ module.exports = {
         const key = crypto.createHash("md5").update(password).digest("hex");
         return User.findOne({email: email, password: key})
             .then((user) => {
-                console.log('USER === ',user)
                 if (user) {
                     if (user.role === true) {
                         const token = jwt.sign({user: user}, process.env.SECRET_ADMIN);
