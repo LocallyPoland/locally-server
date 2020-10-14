@@ -239,9 +239,9 @@ app.patch("/order/:id", /*verifyAdminToken,*/ patch.updateOrder);
  *      '400':
  *        description: Bad Request
  */
-app.delete("/order/:id", verifyAdminToken, delte.deleteOrder);
+app.delete("/order/:id", verifyUserToken, delte.deleteOrder);
 
-app.get("/history", /*verifyAdminToken,*/ get.getOrdersHistory);
+app.get("/history", verifyAdminToken, get.getOrdersHistory);
 
 // app.patch("/order/restore/:id", verifyAdminToken, patch.restoreUser);
 
