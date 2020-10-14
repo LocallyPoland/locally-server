@@ -1,36 +1,83 @@
 const {User} = require("../../../models");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const sendEmail = require('gmail-send')({
-    user: 'locallypoland@gmail.com',
-    pass: 'locallyPoland2020',
+// ====================================================
+const fs = require('fs');
+const readline = require('readline');
+const {google} = require('googleapis');
+
+const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly','https://www.googleapis.com/auth/gmail.send'];
+const TOKEN_PATH = 'token.json';
+fs.readFile('credentials.json', (err, content) => {
+    if (err) return console.log('Error loading client secret file:', err);
+    authorize(JSON.parse(content), listLabels);
 });
-const nodeMailer = require('nodemailer');
-const SMTPTransporter = nodeMailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'locallypoland@gmail.com',
-        pass: 'locallyPoland2020',
-    }
-})
-const gmailSender = nodeMailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-    }
-})
-const sendGridSender = nodeMailer.createTransport({
-    host: "smtp.sendgrid.net",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.SENDGRID_USER,
-        pass: process.env.SENDGRID_API_KEY_GMAIL
-    }
-})
+
+function authorize(credentials, callback) {
+    const {client_secret, client_id, redirect_uris} = credentials.installed;
+    const oAuth2Client = new google.auth.OAuth2(
+        client_id, client_secret, redirect_uris[0]);
+
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) return getNewToken(oAuth2Client, callback);
+        oAuth2Client.setCredentials(JSON.parse(token));
+        callback(oAuth2Client);
+    });
+}
+
+function getNewToken(oAuth2Client, callback) {
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: SCOPES,
+    });
+    console.log('Authorize this app by visiting this url:', authUrl);
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+    rl.question('Enter the code from that page here: ', (code) => {
+        rl.close();
+        oAuth2Client.getToken(code, (err, token) => {
+            if (err) return console.error('Error retrieving access token', err);
+            oAuth2Client.setCredentials(token);
+            fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+                if (err) return console.error(err);
+                console.log('Token stored to', TOKEN_PATH);
+            });
+            callback(oAuth2Client);
+        });
+    });
+}
+function listLabels(auth) {
+    const gmail = google.gmail({version: 'v1', auth});
+    gmail.users.labels.list({
+        userId: 'me',
+    }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const labels = res.data.labels;
+        if (labels.length) {
+            console.log('Labels:');
+            labels.forEach((label) => {
+                console.log(`- ${label.name}`);
+            });
+        } else {
+            console.log('No labels found.');
+        }
+    });
+}
+function makeBody(to, from, subject, message) {
+    var str = ["Content-Type: text/html; charset=\"UTF-8\"\n",
+        "MIME-Version: 1.0\n",
+        "Content-Transfer-Encoding: 7bit\n",
+        "to: ", to, "\n",
+        "from: ", from, "\n",
+        "subject: ", subject, "\n\n",
+        message
+    ].join('');
+
+    var encodedMail = new Buffer(str).toString("base64").replace(/\+/g, '-').replace(/\//g, '_');
+    return encodedMail;
+}
 
 module.exports = {
 
@@ -80,45 +127,23 @@ module.exports = {
                         const token = jwt.sign({user: user}, process.env.SECRET, {
                             expiresIn: "1h",
                         });
-
-                        // SMTPTransporter.sendMail({
-                        //     from: 'locallypoland@gmail.com',
-                        //     to: email,
-                        //     subject: 'test',
-                        //     html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
-                        // }, function (err, info) {
-                        //     if (err) {
-                        //         console.error(err)
-                        //     } else {
-                        //         console.log(info)
-                        //     }
-                        // })
-                        // gmailSender.sendMail({
-                        //         from: 'locallypoland@gmail.com',
-                        //         to: email,
-                        //         subject: 'Verify Your Email',
-                        //         html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
-                        //     }, function (err, info) {
-                        //         if (err) {
-                        //             console.error(err)
-                        //         } else {
-                        //             console.log(info)
-                        //         }
-                        //     }
-                        // )
-                        sendGridSender.sendMail({
-                                from: 'locallypoland@gmail.com',
-                                to: email,
-                                subject: 'Verify Your Email',
-                                html: `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`
-                            }, function (err, info) {
-                                if (err) {
-                                    console.error(err)
-                                } else {
-                                    console.log(info)
+                        function sendMessage(auth) {
+                            const gmail = google.gmail({version: 'v1', auth});
+                            var raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
+                            gmail.users.messages.send({
+                                auth: auth,
+                                userId: 'me',
+                                resource: {
+                                    raw: raw
                                 }
-                            }
-                        )
+                            }, function(err, response) {
+                                console.log(err || response)
+                            });
+                        }
+                        fs.readFile('credentials.json', (err, content) => {
+                            if (err) return console.log('Error loading client secret file:', err);
+                            authorize(JSON.parse(content), sendMessage);
+                        });
                         res.send({token, user});
                     })
                     .catch((err) => {
@@ -158,14 +183,24 @@ module.exports = {
             .then(async (user) => {
                 if (user) {
                     try {
-                        const {result, full} = await sendEmail({
-                            user: 'locallypoland@gmail.com',
-                            pass: 'locallyPoland2020',
-                            to: email,
-                            subject: 'Verify Your Email',
-                            text: randomizerPass
+                        function sendMessage(auth) {
+                            const gmail = google.gmail({version: 'v1', auth});
+                            var raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `${randomizerPass}`);
+                            gmail.users.messages.send({
+                                auth: auth,
+                                userId: 'me',
+                                resource: {
+                                    raw: raw
+                                }
+                            }, function(err, response) {
+                                console.log(err || response)
+                            });
+                        }
+                        fs.readFile('credentials.json', (err, content) => {
+                            if (err) return console.log('Error loading client secret file:', err);
+                            authorize(JSON.parse(content), sendMessage);
                         });
-                        // console.log(result, full)
+
                     } catch (error) {
                         console.error('ERROR', error);
                     }
