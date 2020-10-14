@@ -29,7 +29,11 @@ module.exports = {
         const {id} = req.body;
         return await User.findById(id)
             .then((user) => {
-                res.json(user);
+                if (user) {
+                    res.json(user);
+                } else {
+                    res.sendStatus(400)
+                }
             })
             .catch((err) => {
                 console.error(err);
