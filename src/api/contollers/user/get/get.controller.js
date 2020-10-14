@@ -26,11 +26,12 @@ module.exports = {
     },
 
     getUser: async (req, res) => {
-        const {user} = req.body;
-        console.log("User === ",user)
-        return await User.findById(user._id)
+        const {user: {_id}} = req.body;
+        console.log("User === ", _id)
+        return await User.findById(_id)
             .then((user) => {
                 if (user) {
+
                     res.json(user);
                 } else {
                     res.sendStatus(400)
