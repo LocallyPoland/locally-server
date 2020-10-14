@@ -27,6 +27,7 @@ module.exports = {
 
     getUser: async (req, res) => {
         const {user} = req.body;
+        console.log("User === ",user)
         return await User.findById(user._id)
             .then((user) => {
                 if (user) {
