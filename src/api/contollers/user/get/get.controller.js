@@ -26,8 +26,8 @@ module.exports = {
     },
 
     getUser: async (req, res) => {
-        const {id} = req.body;
-        return await User.findById(id)
+        const {user} = req.body;
+        return await User.findById(user._id)
             .then((user) => {
                 if (user) {
                     res.json(user);
