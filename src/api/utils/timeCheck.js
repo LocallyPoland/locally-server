@@ -5,7 +5,8 @@ const timeChecker = (req, res, next) => {
         .then(variable => {
             const time = new Date;
             console.log(variable.timeStart <= time.getHours())
-            if (variable.timeStart <= time.getHours() && variable.timeStop >= time.getHours() && !variable.switcher) {
+            if (variable.timeStart === time.getHours() && variable.timeStop === time.getHours() && !variable.switcher) {
+                // if (variable.timeStart <= time.getHours() && variable.timeStop >= time.getHours() && !variable.switcher) {
                 res.send({error: true})
             } else {
                 next();
