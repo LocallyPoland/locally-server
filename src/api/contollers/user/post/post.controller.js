@@ -28,7 +28,7 @@ const sendGridSender = nodeMailer.createTransport({
     secure: true,
     auth: {
         user: process.env.SENDGRID_USER,
-        pass: process.env.SENDGRID_API_KEY_NEWGMAIL
+        pass: process.env.SENDGRID_API_KEY_GMAIL
     }
 })
 
