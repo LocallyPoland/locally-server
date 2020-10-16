@@ -9,6 +9,7 @@ const OrderSchema = new Schema(
     weight: Number,
     length: Number,
     status: String,
+    comments: String,
     pickUp: String,
     deliveryTime: Date,
     deliveryAddress: String,
