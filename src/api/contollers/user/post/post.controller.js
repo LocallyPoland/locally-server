@@ -6,7 +6,7 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 
-const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly','https://www.googleapis.com/auth/gmail.send'];
+const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.send'];
 const TOKEN_PATH = 'token.json';
 fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
@@ -48,6 +48,7 @@ function getNewToken(oAuth2Client, callback) {
         });
     });
 }
+
 function listLabels(auth) {
     const gmail = google.gmail({version: 'v1', auth});
     gmail.users.labels.list({
@@ -65,6 +66,7 @@ function listLabels(auth) {
         }
     });
 }
+
 function makeBody(to, from, subject, message) {
     var str = ["Content-Type: text/html; charset=\"UTF-8\"\n",
         "MIME-Version: 1.0\n",
@@ -94,7 +96,7 @@ module.exports = {
                             httpOnly: true,
                             secure: true,
                         });
-                        res.json({isAdmin: user.role});
+                        res.json({isAdmin: user.role, email: user.email});
                     } else {
                         const token = jwt.sign({user: user}, process.env.SECRET);
                         res.send({user, token});
@@ -127,19 +129,21 @@ module.exports = {
                         const token = jwt.sign({user: user}, process.env.SECRET, {
                             expiresIn: "1h",
                         });
+
                         function sendMessage(auth) {
                             const gmail = google.gmail({version: 'v1', auth});
-                            var raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
+                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
                             gmail.users.messages.send({
                                 auth: auth,
                                 userId: 'me',
                                 resource: {
                                     raw: raw
                                 }
-                            }, function(err, response) {
+                            }, function (err, response) {
                                 console.log(err || response)
                             });
                         }
+
                         fs.readFile('credentials.json', (err, content) => {
                             if (err) return console.log('Error loading client secret file:', err);
                             authorize(JSON.parse(content), sendMessage);
@@ -185,17 +189,18 @@ module.exports = {
                     try {
                         function sendMessage(auth) {
                             const gmail = google.gmail({version: 'v1', auth});
-                            var raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `${randomizerPass}`);
+                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `${randomizerPass}`);
                             gmail.users.messages.send({
                                 auth: auth,
                                 userId: 'me',
                                 resource: {
                                     raw: raw
                                 }
-                            }, function(err, response) {
+                            }, function (err, response) {
                                 console.log(err || response)
                             });
                         }
+
                         fs.readFile('credentials.json', (err, content) => {
                             if (err) return console.log('Error loading client secret file:', err);
                             authorize(JSON.parse(content), sendMessage);
