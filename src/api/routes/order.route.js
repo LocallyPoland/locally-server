@@ -1,13 +1,13 @@
 const app = require("express").Router();
-const { get, delte, post, patch } = require("../contollers/order");
+const {get, delte, post, patch} = require("../contollers/order");
 
 const {
-  verifyUserToken,
-  verifyAdminToken,
-  tokenSwitcher
+    verifyUserToken,
+    verifyAdminToken,
+    tokenSwitcher
 } = require("../middleware/jwtAuth");
 
-app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
+app.get("/order", verifyAdminToken, get.getAllOrders);
 
 /**
  * @swagger

@@ -5,7 +5,7 @@ const {
   verifyUserToken
 } = require("../middleware/jwtAuth");
 
-app.get("/user/address", /*verifyUserToken,*/ get.getAllAddress);
+app.get("/user/address", verifyUserToken, get.getAllAddress);
 
 app.get("/user/address/:id", verifyUserToken, get.getAddress);
 
