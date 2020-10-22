@@ -5,7 +5,7 @@ const updateSettings = async (req, res) => {
         const {timeStart, timeStop, price, priceForCustomer, switcher} = req.body;
         const settings = await Variables.findByIdAndUpdate(process.env.DEFAULT_SETTINGS_ID, {
             timeStart, timeStop, price, priceForCustomer, switcher
-        }, {$project: {_id: 0}});
+        }, {$project: {_id: 0}, new: true});
         res.send(settings);
     } catch (e) {
         res.sendStatus(400);
