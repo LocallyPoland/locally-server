@@ -8,7 +8,7 @@ const {
 
 app.get("/settings", /*verifyUserToken,*/ get.getSettings);
 
-app.patch("/settings", /*verifyAdminToken*/, patch.updateSettings);
+app.patch("/settings", /*verifyAdminToken,*/ patch.updateSettings);
 
 // app.delete("/address/:id", verifyAdminToken, delte.deleteAddress);
 
