@@ -47,7 +47,7 @@ app.get("/order/stats", get.orderStats);
  *      '400':
  *        description: Bad Request
  */
-app.get("/order/:id", tokenSwitcher, get.getOrder);
+app.get("/order/:id",/* tokenSwitcher,*/ get.getOrder);
 
 app.get("/user/history", verifyUserToken, get.userOrderHistory);
 
