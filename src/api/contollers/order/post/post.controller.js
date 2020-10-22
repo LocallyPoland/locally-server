@@ -1,3 +1,4 @@
+const {getNextSequence} = require("../../../utils/getNextId");
 const {Order} = require("../../../models");
 
 const createOrder = (req, res) => {
@@ -24,6 +25,7 @@ const createOrder = (req, res) => {
         status,
         pickUp,
         comments,
+        numOfOrder: getNextSequence('numOfOrder'),
         paymentType,
         deliveryAddress,
         deliveryTime,
