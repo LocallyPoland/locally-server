@@ -7,7 +7,7 @@ const {
     tokenSwitcher
 } = require("../middleware/jwtAuth");
 
-app.get("/order", verifyAdminToken, get.getAllOrders);
+app.get("/order", /*verifyAdminToken,*/ get.getAllOrders);
 
 /**
  * @swagger
@@ -214,7 +214,7 @@ app.post("/order", verifyUserToken, post.createOrder);
  *      '400':
  *        description: Bad Request
  */
-app.patch("/order/:id", verifyAdminToken, patch.updateOrder);
+app.patch("/order/:id",/* verifyAdminToken,*/ patch.updateOrder);
 
 /**
  * @swagger
@@ -241,7 +241,7 @@ app.patch("/order/:id", verifyAdminToken, patch.updateOrder);
  */
 app.delete("/order/:id", verifyUserToken, delte.deleteOrder);
 
-app.get("/history", verifyAdminToken, get.getOrdersHistory);
+app.get("/history",/* verifyAdminToken,*/ get.getOrdersHistory);
 
 // app.patch("/order/restore/:id", verifyAdminToken, patch.restoreUser);
 
