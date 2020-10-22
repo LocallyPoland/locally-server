@@ -18,6 +18,9 @@ const {
 const {timeChecker} = require("./src/api/utils/timeCheck");
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -43,7 +46,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(cookieParser());
 
-db();
+db(io);
 
 app.disable("x-powered-by");
 
@@ -73,6 +76,6 @@ app.use((req, res, next) => {
     res.status(404).send(`<h2>Oops 404</h2> <h3>We think you are lost!</h3>`);
 });
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log(`Server starting on port ${process.env.PORT}`);
 });
