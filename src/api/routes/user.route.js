@@ -27,7 +27,7 @@ const {
  *      '400':
  *        description: Bad Request
  */
-app.get("/users", verifyAdminToken, get.getAllUsers);
+app.get("/users",/* verifyAdminToken,*/ get.getAllUsers);
 
 /**
  * @swagger
