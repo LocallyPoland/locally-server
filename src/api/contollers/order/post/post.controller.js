@@ -1,7 +1,7 @@
 const {getNextSequence} = require("../../../utils/getNextId");
 const {Order} = require("../../../models");
 
-const createOrder = (req, res) => {
+const createOrder = async (req, res) => {
     const {
         user,
         parcel,
@@ -15,7 +15,6 @@ const createOrder = (req, res) => {
         deliveryAddress,
         deliveryTime
     } = req.body;
-
     return Order.create({
         userID: user._id,
         parcel,
@@ -25,7 +24,7 @@ const createOrder = (req, res) => {
         status,
         pickUp,
         comments,
-        numOfOrder: getNextSequence('numOfOrder'),
+        numOfOrder:await getNextSequence('numOfOrder'),
         paymentType,
         deliveryAddress,
         deliveryTime,
@@ -34,7 +33,10 @@ const createOrder = (req, res) => {
         deletedAt: null
     })
         .then(order => res.send(order))
-        .catch(err => err && res.sendStatus(400));
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+        });
 };
 
 module.exports = {
