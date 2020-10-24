@@ -237,7 +237,7 @@ module.exports = {
                             const token = jwt.sign({user: user}, process.env.SECRET, {
                                 expiresIn: "1h",
                             });
-                            res.send(token)
+                            res.send({token,user})
                         }).catch(err => {
                             console.log(err)
                             res.sendStatus(400)
@@ -246,7 +246,7 @@ module.exports = {
                     const token = jwt.sign({user: user}, process.env.SECRET, {
                         expiresIn: "1h",
                     });
-                    res.send(token)
+                    res.send({token,user})
                 }
             ).catch(err => {
                 console.log(err)
