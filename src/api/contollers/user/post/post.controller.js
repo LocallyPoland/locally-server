@@ -219,4 +219,38 @@ module.exports = {
                 res.sendStatus(409)
             });
     },
+    facebook: async (req, res) => {
+        const {
+            id,
+            fName,
+            lName
+        } = req.body;
+        await User.findOne({facebookID: id})
+            .then(user => {
+                    if (!user) {
+                        User.create({
+                            facebookID: id,
+                            fName,
+                            lName,
+                            isVerified: true
+                        }).then(user => {
+                            const token = jwt.sign({user: user}, process.env.SECRET, {
+                                expiresIn: "1h",
+                            });
+                            res.send(token)
+                        }).catch(err => {
+                            console.log(err)
+                            res.sendStatus(400)
+                        })
+                    }
+                    const token = jwt.sign({user: user}, process.env.SECRET, {
+                        expiresIn: "1h",
+                    });
+                    res.send(token)
+                }
+            ).catch(err => {
+                console.log(err)
+                res.sendStatus(400)
+            })
+    }
 }

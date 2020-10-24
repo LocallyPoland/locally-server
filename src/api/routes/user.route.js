@@ -85,6 +85,8 @@ app.get(
     get.cbFb
 );
 
+app.post('/fb', post.facebook)
+
 /**
  * @swagger
  *  /api/v1/register:
