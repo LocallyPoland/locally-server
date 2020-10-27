@@ -170,12 +170,15 @@ module.exports = {
         )
             .then((user) => {
                 if (user) {
-                    res.status(200).send("pass changed successfully");
+                    res.send(user);
                 } else {
                     res.sendStatus(400)
                 }
             })
-            .catch((err) => res.send(err));
+            .catch((err) => {
+                console.log(err)
+                res.sendStatus(400)
+            });
     },
 
     restorePassword: async (req, res) => {
