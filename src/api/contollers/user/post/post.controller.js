@@ -132,7 +132,7 @@ module.exports = {
 
                         function sendMessage(auth) {
                             const gmail = google.gmail({version: 'v1', auth});
-                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="https://locally-pl.herokuapp.com/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
+                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
                             gmail.users.messages.send({
                                 auth: auth,
                                 userId: 'me',
