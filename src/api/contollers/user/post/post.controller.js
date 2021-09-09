@@ -132,7 +132,8 @@ module.exports = {
 
                         function sendMessage(auth) {
                             const gmail = google.gmail({version: 'v1', auth});
-                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', `<a href="/api/v1/verifyEmail?email=${email}"> click for verify</a>`);
+                            const s_email = `${email}`;
+                            const raw = makeBody(email, 'locallypoland@gmail.com', 'Verify Email', '<a href="http://' + process.env.BASE_URL + '/api/v1/verifyEmail?email=' + s_email + '"> click for verify</a>');
                             gmail.users.messages.send({
                                 auth: auth,
                                 userId: 'me',
